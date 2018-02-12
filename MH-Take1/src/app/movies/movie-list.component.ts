@@ -17,6 +17,15 @@ export class MovieListComponent implements OnInit {
     filteredMovies: IMovie[];
     movies: IMovie[];
 
+    // private _listFilter: string;
+    // get listFilter(): string {
+    //     return this._listFilter;
+    // }
+    // set listFilter(value: string) {
+    //     this._listFilter = value;
+    //     this.performFilter(this.listFilter);
+    // }
+
     constructor(private movieService: MovieService,
                 private route: ActivatedRoute) { }
 
@@ -32,19 +41,19 @@ export class MovieListComponent implements OnInit {
             .subscribe(
                 (movies: IMovie[]) => {
                     this.movies = movies;
-                    this.filteredMovies = this.performFilter(this.listFilter)
+                    this.performFilter(this.listFilter);
                 },
                 (error: any) => this.errorMessage = <any>error);
     }
 
     // Local filter
-    performFilter(filterBy: string): IMovie[] {
+    performFilter(filterBy: string): void {
         if (filterBy) {
             filterBy = filterBy.toLocaleLowerCase();
-            return this.movies.filter((movie: IMovie) =>
+            this.filteredMovies = this.movies.filter((movie: IMovie) =>
                 movie.title.toLocaleLowerCase().indexOf(filterBy) !== -1);
         } else {
-            return this.movies;
+            this.filteredMovies = this.movies;
         }
     }
 
