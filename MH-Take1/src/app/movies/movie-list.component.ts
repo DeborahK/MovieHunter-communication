@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import { IMovie } from './movie';
 import { MovieService } from './movie.service';
@@ -8,7 +7,7 @@ import { MovieService } from './movie.service';
     templateUrl: './movie-list.component.html',
     styleUrls: ['./movie-list.component.css']
 })
-export class MovieListComponent implements OnInit {
+export class MovieListComponent implements OnInit, AfterViewInit {
     pageTitle: string = 'Movie List';
     errorMessage: string;
     showImage: boolean = false;
@@ -16,6 +15,8 @@ export class MovieListComponent implements OnInit {
 
     filteredMovies: IMovie[];
     movies: IMovie[];
+
+    @ViewChild('filterElement') filterElementRef: ElementRef;
 
     // private _listFilter: string;
     // get listFilter(): string {
@@ -26,27 +27,28 @@ export class MovieListComponent implements OnInit {
     //     this.performFilter(this.listFilter);
     // }
 
-    constructor(private movieService: MovieService,
-                private route: ActivatedRoute) { }
+    constructor(private movieService: MovieService) { }
 
     ngOnInit(): void {
-        this.route.queryParams.subscribe(param => {
-            this.pageTitle = 'Movie List';
-            this.getMovies();
-        });
+        this.getMovies();
+    }
+
+    ngAfterViewInit(): void {
+        if (this.filterElementRef.nativeElement) {
+            this.filterElementRef.nativeElement.focus();
+        }
     }
 
     getMovies(): void {
-        this.movieService.getMovies()
-            .subscribe(
-                (movies: IMovie[]) => {
-                    this.movies = movies;
-                    this.performFilter(this.listFilter);
-                },
-                (error: any) => this.errorMessage = <any>error);
+        this.movieService.getMovies().subscribe(
+            (movies: IMovie[]) => {
+                this.movies = movies;
+                this.performFilter(this.listFilter);
+            },
+            (error: any) => this.errorMessage = <any>error
+        );
     }
 
-    // Local filter
     performFilter(filterBy: string): void {
         if (filterBy) {
             filterBy = filterBy.toLocaleLowerCase();

@@ -5,20 +5,14 @@
 
     <!-- Filter the Title   -->
     <div class="panel-body">
-        <div class="row">
-            <div class="col-md-2">Filter by:</div>
-            <div class="col-md-4">
-                <input type="text" [(ngModel)]="listFilter" />
-            </div>
+        <!-- Filter by the Title -->
+        <div class='row'>
+            <pm-criteria #filterCriteria class='col-md-10'
+                [displayDetail]='includeDetail'
+                [hitCount]='filteredMovies?.length'
+                (valueChange)='onValueChange($event)'>
+            </pm-criteria>
         </div>
-
-        <div class="row" [hidden]="!listFilter">
-            <div class="col-md-6">
-                <h3>Movies filtered by: {{listFilter}}</h3>
-            </div>
-        </div>
-
-        <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
 
         <div class="table-responsive">
             <table class="table" *ngIf="movies && movies.length">
@@ -68,4 +62,7 @@
             </table>
         </div>
     </div>
+</div>
+<div *ngIf='errorMessage' class='alert alert-danger'>
+    Error: {{ errorMessage }}
 </div>

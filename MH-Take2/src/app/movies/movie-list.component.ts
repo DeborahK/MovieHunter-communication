@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { IMovie } from './movie';
 import { MovieService } from './movie.service';
+import { CriteriaComponent } from '../shared/criteria/criteria.component';
 
 @Component({
     templateUrl: './movie-list.component.html',
@@ -12,41 +12,31 @@ export class MovieListComponent implements OnInit {
     pageTitle: string = 'Movie List';
     errorMessage: string;
     showImage: boolean = false;
-    listFilter: string;
+    includeDetail: boolean = true;
 
     filteredMovies: IMovie[];
     movies: IMovie[];
 
-    // private _listFilter: string;
-    // get listFilter(): string {
-    //     return this._listFilter;
-    // }
-    // set listFilter(value: string) {
-    //     this._listFilter = value;
-    //     this.performFilter(this.listFilter);
-    // }
-
-    constructor(private movieService: MovieService,
-                private route: ActivatedRoute) { }
+    constructor(private movieService: MovieService) { }
 
     ngOnInit(): void {
-        this.route.queryParams.subscribe(param => {
-            this.pageTitle = 'Movie List';
-            this.getMovies();
-        });
+        this.getMovies();
     }
 
     getMovies(): void {
-        this.movieService.getMovies()
-            .subscribe(
-                (movies: IMovie[]) => {
-                    this.movies = movies;
-                    this.performFilter(this.listFilter);
-                },
-                (error: any) => this.errorMessage = <any>error);
+        this.movieService.getMovies().subscribe(
+            (movies: IMovie[]) => {
+                this.movies = movies;
+                this.performFilter(null);
+            },
+            (error: any) => this.errorMessage = <any>error
+        );
     }
 
-    // Local filter
+    onValueChange(value: string): void {
+        this.performFilter(value);
+    }
+
     performFilter(filterBy: string): void {
         if (filterBy) {
             filterBy = filterBy.toLocaleLowerCase();

@@ -15,7 +15,7 @@ const appRoutes: Routes = [
             { path: 'welcome', component: WelcomeComponent },
             {
                 path: 'movies',
-                canActivate: [AuthGuard],
+                // canActivate: [AuthGuard],
                 loadChildren: './movies/movie.module#MovieModule'
             },
             { path: '', redirectTo: 'welcome', pathMatch: 'full' }
