@@ -23,18 +23,6 @@ export class MovieEditReactiveComponent implements OnInit {
                 private router: Router,
                 private route: ActivatedRoute) {
 
-        // Without FormBuilder
-        // this.editForm = new FormGroup({
-        //     title: new FormControl('', [Validators.required,
-        //                                 Validators.minLength(3),
-        //                                 Validators.maxLength(50)]),
-        //     director: new FormControl('', [Validators.required,
-        //                                    Validators.minLength(5),
-        //                                    Validators.maxLength(50)]),
-        //     starRating: new FormControl('', NumberValidators.range(1, 5)),
-        //     description: new FormControl('')
-        // });
-
         // With FormBuilder
         this.editForm = this.fb.group({
             title: ['', [Validators.required,
@@ -50,9 +38,6 @@ export class MovieEditReactiveComponent implements OnInit {
         // Watch all of the controls on the form
         this.editForm.valueChanges
             .subscribe(data => this.onValueChanged(data));
-        // this.editForm.valueChanges
-        //         .debounceTime(500)
-        //         .subscribe(data => this.onValueChanged(data));
 
         // Watch one control on the form.
         this.editForm.get('title').valueChanges
@@ -84,6 +69,7 @@ export class MovieEditReactiveComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Watch for changes to the parameter
         this.route.params.subscribe(
             params => {
                 const id = +params['id'];
@@ -100,9 +86,11 @@ export class MovieEditReactiveComponent implements OnInit {
     }
 
     onMovieRetrieved(movie: IMovie): void {
+        // Reset the form back to pristine
         if (this.editForm) {
             this.editForm.reset();
         }
+
         this.movie = movie;
 
         if (this.movie.id === 0) {
@@ -136,7 +124,7 @@ export class MovieEditReactiveComponent implements OnInit {
 
     saveMovie(): void {
         console.log(this.editForm);
-        if (this.editForm.dirty && this.editForm.valid) {
+        if (this.editForm.valid) {
             // Copy the form values over the object values
             const m = Object.assign({}, this.movie, this.editForm.value);
 
