@@ -21,7 +21,7 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     // private _listFilter: string;
     // get listFilter(): string {
     //     return this._listFilter;
-    // }npm
+    // }
     // set listFilter(value: string) {
     //     this._listFilter = value;
     //     this.performFilter(this.listFilter);
