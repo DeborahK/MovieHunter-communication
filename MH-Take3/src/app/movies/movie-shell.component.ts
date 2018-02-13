@@ -1,19 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieService } from './movie.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     templateUrl: './movie-shell.component.html'
 })
-export class MovieShellComponent implements OnInit, OnDestroy {
+export class MovieShellComponent implements OnInit {
     pageTitle: string = 'Movies';
     yearCount: number;
-    sub: Subscription;
 
     constructor(private movieService: MovieService) { }
 
     ngOnInit() {
-        this.sub = this.movieService.selectedMovieChanges$.subscribe(selectedMovie => {
+        this.movieService.selectedMovieChanges$.subscribe(selectedMovie => {
             if (selectedMovie) {
                 const start = new Date(selectedMovie.releaseDate);
                 const now = new Date();
@@ -23,9 +21,5 @@ export class MovieShellComponent implements OnInit, OnDestroy {
                 this.yearCount = 0;
             }
         });
-    }
-
-    ngOnDestroy(): void {
-        this.sub.unsubscribe();
     }
 }

@@ -12,26 +12,25 @@ export class MovieListComponent implements OnInit {
     pageTitle: string = 'Movie List';
     errorMessage: string;
     movies: IMovie[];
-    selectedMovie: IMovie | null;
+
+    get selectedMovie(): IMovie | null {
+        return this.movieService.currentMovie;
+    }
 
     constructor(private movieService: MovieService) { }
 
     ngOnInit(): void {
-        this.movieService.selectedMovieChanges$.subscribe(
-            selectedMovie => this.selectedMovie = selectedMovie
-        );
-
         this.getMovies();
-      }
-
-      onSelected(movie: IMovie): void {
-        this.movieService.changeSelectedMovie(movie);
-      }
+    }
 
     getMovies(): void {
         this.movieService.getMovies().subscribe(
             (movies: IMovie[]) => this.movies = movies,
             (error: any) => this.errorMessage = <any>error
         );
+    }
+
+    onSelected(movie: IMovie): void {
+        this.movieService.currentMovie = movie;
     }
 }

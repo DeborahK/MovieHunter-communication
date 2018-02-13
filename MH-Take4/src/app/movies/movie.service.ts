@@ -6,9 +6,6 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { of } from 'rxjs/observable/of';
 import { catchError, tap, map } from 'rxjs/operators';
 
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
 import { IMovie } from './movie';
 
 @Injectable()
@@ -16,14 +13,9 @@ export class MovieService {
     private moviesUrl = 'api/movies';
     private movies: IMovie[];
 
-    private selectedMovieSource = new BehaviorSubject<IMovie | null>(null);
-    selectedMovieChanges$ = this.selectedMovieSource.asObservable();
+    currentMovie: IMovie | null;
 
     constructor(private http: HttpClient) { }
-
-    changeSelectedMovie(selectedMovie: IMovie | null): void {
-        this.selectedMovieSource.next(selectedMovie);
-    }
 
     getMovies(): Observable<IMovie[]> {
         if (this.movies) {
@@ -55,6 +47,14 @@ export class MovieService {
                         );
     }
 
+    saveMovie(movie: IMovie): Observable<IMovie> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        if (movie.id === 0) {
+            return this.createMovie(movie, headers);
+        }
+        return this.updateMovie(movie, headers);
+    }
+
     deleteMovie(id: number): Observable<Response> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -66,19 +66,11 @@ export class MovieService {
                                 const foundIndex = this.movies.findIndex(item => item.id === id);
                                 if (foundIndex > -1) {
                                     this.movies.splice(foundIndex, 1);
-                                    this.changeSelectedMovie(null);
+                                    this.currentMovie = null;
                                 }
                             }),
                             catchError(this.handleError)
                         );
-    }
-
-    saveMovie(movie: IMovie): Observable<IMovie> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        if (movie.id === 0) {
-            return this.createMovie(movie, headers);
-        }
-        return this.updateMovie(movie, headers);
     }
 
     private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
@@ -88,7 +80,7 @@ export class MovieService {
                             tap(data => console.log('createMovie: ' + JSON.stringify(data))),
                             tap(data => {
                                 this.movies.push(data);
-                                this.changeSelectedMovie(data);
+                                this.currentMovie = data;
                             }),
                             catchError(this.handleError)
                         );

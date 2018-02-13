@@ -40,13 +40,15 @@
                     </div>
                 </div>
                 
-                <div class="form-group" [ngClass]="{'has-error': formError.starRating}">
-                    <label class="col-md-2 control-label" for="inputStarRating">Star Rating (1-5)</label>
+                <div class="form-group" 
+                     [ngClass]="{'has-error': formError.starRating}">
+                    <label class="col-md-2 control-label" 
+                           for="inputStarRating">Star Rating (1-5)</label>
 
                     <div class="col-md-8">
                         <input class="form-control" 
                                 id="inputStarRating" 
-                                type="text" 
+                                type="number" 
                                 placeholder="Rating" 
                                 formControlName="starRating" />
                         <span class="help-block" *ngIf="formError.starRating">

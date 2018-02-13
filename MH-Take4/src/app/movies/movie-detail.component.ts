@@ -10,15 +10,15 @@ import { MovieService } from './movie.service';
 })
 export class MovieDetailComponent implements OnInit {
     pageTitle: string = 'Movie Detail';
-    movie: IMovie | null;
     errorMessage: string;
+
+    get movie(): IMovie | null {
+        return this.movieService.currentMovie;
+    }
 
     constructor(private movieService: MovieService) {
     }
 
     ngOnInit(): void {
-        this.movieService.selectedMovieChanges$.subscribe(
-            selectedMovie => this.movie = selectedMovie
-        );
     }
 }

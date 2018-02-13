@@ -34,6 +34,14 @@ export class MovieService {
                         );
     }
 
+    saveMovie(movie: IMovie): Observable<IMovie> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        if (movie.id === 0) {
+            return this.createMovie(movie, headers);
+        }
+        return this.updateMovie(movie, headers);
+    }
+
     deleteMovie(id: number): Observable<Response> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -43,14 +51,6 @@ export class MovieService {
                             tap(data => console.log('deleteMovie: ' + JSON.stringify(data))),
                             catchError(this.handleError)
                         );
-    }
-
-    saveMovie(movie: IMovie): Observable<IMovie> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        if (movie.id === 0) {
-            return this.createMovie(movie, headers);
-        }
-        return this.updateMovie(movie, headers);
     }
 
     private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
