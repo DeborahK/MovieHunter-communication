@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit,
          Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'pm-criteria',
+  selector: 'mh-criteria',
   templateUrl: './criteria.component.html',
   styleUrls: ['./criteria.component.css']
 })
@@ -36,9 +36,9 @@ export class CriteriaComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['hitCount']) {
-      if (changes['hitCount'].currentValue==null) {
+      if (changes['hitCount'].currentValue === null) {
         this.hitMessage = '';
-      } else if(changes['hitCount'].currentValue==0) {
+      } else if (changes['hitCount'].currentValue === 0) {
         this.hitMessage = 'No matches found';
       } else {
         this.hitMessage = 'Hits: ' + this.hitCount;

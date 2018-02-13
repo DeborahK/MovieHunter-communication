@@ -21,7 +21,7 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     // private _listFilter: string;
     // get listFilter(): string {
     //     return this._listFilter;
-    // }
+    // }npm
     // set listFilter(value: string) {
     //     this._listFilter = value;
     //     this.performFilter(this.listFilter);
@@ -49,7 +49,7 @@ export class MovieListComponent implements OnInit, AfterViewInit {
         );
     }
 
-    performFilter(filterBy: string): void {
+    performFilter(filterBy: string | null): void {
         if (filterBy) {
             filterBy = filterBy.toLocaleLowerCase();
             this.filteredMovies = this.movies.filter((movie: IMovie) =>

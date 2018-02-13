@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { StarComponent } from './star.component';
 import { CriteriaComponent } from './criteria/criteria.component';
-import { RangeValidatorDirective } from './range.directive';
 
 @NgModule({
   imports: [
@@ -13,15 +12,13 @@ import { RangeValidatorDirective } from './range.directive';
   ],
   declarations: [
     StarComponent,
-    CriteriaComponent,
-    RangeValidatorDirective
+    CriteriaComponent
   ],
   exports: [
     StarComponent,
     CriteriaComponent,
     CommonModule,
-    FormsModule,
-    RangeValidatorDirective
+    FormsModule
   ]
 })
 export class SharedModule { }

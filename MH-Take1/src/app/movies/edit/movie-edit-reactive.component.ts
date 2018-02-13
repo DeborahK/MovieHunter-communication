@@ -5,8 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { IMovie } from '../movie';
 import { MovieService } from '../movie.service';
 
-import { NumberValidators } from '../../shared/number.validator';
-
 @Component({
     templateUrl: './movie-edit-reactive.component.html'
 })
@@ -26,22 +24,19 @@ export class MovieEditReactiveComponent implements OnInit {
         // With FormBuilder
         this.editForm = this.fb.group({
             title: ['', [Validators.required,
-                           Validators.minLength(3),
-                           Validators.maxLength(50)]],
+                         Validators.minLength(3),
+                         Validators.maxLength(50)]],
             director: ['', [Validators.required,
-                              Validators.minLength(5),
-                              Validators.maxLength(50)]],
-            starRating: ['', NumberValidators.range(1, 5)],
+                            Validators.minLength(5),
+                            Validators.maxLength(50)]],
+            starRating: ['', [ Validators.min(1),
+                               Validators.max(5)]],
             description: ['']
         });
 
         // Watch all of the controls on the form
         this.editForm.valueChanges
             .subscribe(data => this.onValueChanged(data));
-
-        // Watch one control on the form.
-        this.editForm.get('title').valueChanges
-                     .subscribe(value => console.log(`Title Changed to: ${value}`));
 
         // Initialize strings
         this.formError = {
@@ -63,7 +58,8 @@ export class MovieEditReactiveComponent implements OnInit {
                 'maxlength': 'Director cannot exceed 50 characters.'
             },
             'starRating': {
-                'range': 'Rate the movie between 1 (lowest) and 5 (highest).'
+                'min': 'Rate the movie between 1 (lowest) and 5 (highest).',
+                'max': 'Rate the movie between 1 (lowest) and 5 (highest).'
             }
         };
     }
@@ -110,25 +106,31 @@ export class MovieEditReactiveComponent implements OnInit {
 
     // Start of a generic validator
     onValueChanged(data: any): void {
+        if (this.editForm) {
         Object.keys(this.formError).forEach(field => {
-            const hasError = this.editForm.get(field).dirty &&
-                !this.editForm.get(field).valid;
-            this.formError[field] = '';
-            if (hasError) {
-                Object.keys(this.editForm.get(field).errors).forEach(rule =>
-                        this.formError[field] += this.validationMessages[field][rule] + ' '
-                );
+            const control = this.editForm.get(field);
+            if (control) {
+                const hasError = control.dirty && !control.valid;
+                this.formError[field] = '';
+                if (hasError) {
+                    Object.keys(<object>control.errors).forEach(rule =>
+                            this.formError[field] += this.validationMessages[field][rule] + ' '
+                    );
+                }
             }
         });
+    }
     }
 
     saveMovie(): void {
         console.log(this.editForm);
         if (this.editForm.valid) {
-            // Copy the form values over the object values
-            const m = Object.assign({}, this.movie, this.editForm.value);
+            // Copy the form values into the object
+            Object.keys(this.editForm.value).forEach(key =>
+                this.movie[key] = this.editForm.value[key]
+            );
 
-            this.movieService.saveMovie(m).subscribe(
+            this.movieService.saveMovie(this.movie).subscribe(
                 () => this.onSaveComplete(),
                 (error: any) => this.errorMessage = <any>error
             );

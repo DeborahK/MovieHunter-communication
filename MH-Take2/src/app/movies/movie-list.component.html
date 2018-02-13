@@ -7,11 +7,11 @@
     <div class="panel-body">
         <!-- Filter by the Title -->
         <div class='row'>
-            <pm-criteria #filterCriteria class='col-md-10'
+            <mh-criteria #filterCriteria class='col-md-10'
                 [displayDetail]='includeDetail'
                 [hitCount]='filteredMovies?.length'
                 (valueChange)='onValueChange($event)'>
-            </pm-criteria>
+            </mh-criteria>
         </div>
 
         <div class="table-responsive">

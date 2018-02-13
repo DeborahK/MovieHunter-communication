@@ -14,7 +14,7 @@ export class MovieEditComponent implements OnInit {
     pageTitle: string = 'Movie Edit';
     errorMessage: string;
 
-    private movie: IMovie;
+    movie: IMovie;
     private originalMovie: IMovie;
 
     constructor(private route: ActivatedRoute,
@@ -60,7 +60,13 @@ export class MovieEditComponent implements OnInit {
     saveMovie(): void {
         if (this.editForm.valid) {
             this.movieService.saveMovie(this.movie).subscribe(
-                () => this.onSaveComplete()
+                () =>  {
+                    // Assign the changes from the copy
+                    Object.keys(this.movie).forEach(key =>
+                        this.originalMovie[key] = this.movie[key]
+                    );
+                    this.onSaveComplete();
+                }
             );
         } else {
             this.errorMessage = 'Please correct the validation errors.';

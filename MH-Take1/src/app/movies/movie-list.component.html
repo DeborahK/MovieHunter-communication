@@ -19,8 +19,6 @@
             </div>
         </div>
 
-        <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
-
         <div class="table-responsive">
             <table class="table" *ngIf="movies && movies.length">
                 <thead>
@@ -69,4 +67,7 @@
             </table>
         </div>
     </div>
+</div>
+<div *ngIf='errorMessage' class='alert alert-danger'>
+    Error: {{ errorMessage }}
 </div>

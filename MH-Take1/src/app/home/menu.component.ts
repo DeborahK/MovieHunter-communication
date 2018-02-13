@@ -14,8 +14,12 @@ export class MenuComponent implements OnInit {
     return this.authService.isLoggedIn();
   }
 
-  get userName(): string {
-    return this.authService.currentUser.userName;
+  get userName(): string | null {
+    if (this.authService.currentUser) {
+      return this.authService.currentUser.userName;
+    } else {
+      return null;
+    }
   }
 
   constructor(private router: Router,

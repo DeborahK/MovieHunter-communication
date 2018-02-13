@@ -82,7 +82,7 @@ export class MovieService {
     }
 
     private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
-        movie.id = undefined;
+        movie.id = null;
         return this.http.post<IMovie>(this.moviesUrl, movie,  { headers: headers} )
                         .pipe(
                             tap(data => console.log('createMovie: ' + JSON.stringify(data))),
@@ -98,7 +98,7 @@ export class MovieService {
         const url = `${this.moviesUrl}/${movie.id}`;
         return this.http.put<IMovie>(url, movie, { headers: headers} )
                         .pipe(
-                            tap(data => console.log('updateMovie: ' + JSON.stringify(data))),
+                            tap(data => console.log('updateMovie: ' + movie.id)),
                             catchError(this.handleError)
                         );
     }

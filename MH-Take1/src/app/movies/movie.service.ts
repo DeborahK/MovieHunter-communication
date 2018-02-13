@@ -4,11 +4,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
-
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/do';
-// import 'rxjs/add/operator/map';
 import { catchError, tap, map } from 'rxjs/operators';
 
 import { IMovie } from './movie';
@@ -37,26 +32,6 @@ export class MovieService {
                             tap(data => console.log('Data: ' + JSON.stringify(data))),
                             catchError(this.handleError)
                         );
-        // return this.http.get<IMovie[]>(this.moviesUrl)
-        //                 .do(data => console.log(JSON.stringify(data)))
-        //                 .catch(this.handleError);
-    }
-
-    private handleError(err: HttpErrorResponse): ErrorObservable {
-        console.log(err);
-        // in a real world app, we may send the server to some remote logging infrastructure
-        // instead of just logging it to the console
-        let errorMessage: string;
-        if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            errorMessage = `Backend returned code ${err.status}, body was: ${err.error}`;
-        }
-        console.error(errorMessage);
-        return _throw(errorMessage);
     }
 
     deleteMovie(id: number): Observable<Response> {
@@ -79,7 +54,7 @@ export class MovieService {
     }
 
     private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
-        movie.id = undefined;
+        movie.id = null;
         return this.http.post<IMovie>(this.moviesUrl, movie,  { headers: headers} )
                         .pipe(
                             tap(data => console.log('createMovie: ' + JSON.stringify(data))),
@@ -87,30 +62,48 @@ export class MovieService {
                         );
     }
 
-    private initializeMovie(): IMovie {
-        // Return an initialized object
-        return {
-            'id': 0,
-            'approvalRating': null,
-            'description': '',
-            'director': '',
-            'imageurl': '',
-            'mpaa': '',
-            'price': null,
-            'releaseDate': '',
-            'starRating': null,
-            'title': '',
-            'category': '',
-            'tags': []
-        };
-    }
-
     private updateMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
         const url = `${this.moviesUrl}/${movie.id}`;
         return this.http.put<IMovie>(url, movie, { headers: headers} )
                         .pipe(
-                            tap(data => console.log('updateMovie: ' + JSON.stringify(data))),
+                            tap(data => console.log('updateMovie: ' + movie.id)),
                             catchError(this.handleError)
                         );
     }
+
+    private initializeMovie(): IMovie {
+        // Return an initialized object
+        return {
+            id: 0,
+            approvalRating: null,
+            description: '',
+            director: '',
+            imageurl: '',
+            mpaa: '',
+            price: null,
+            releaseDate: '',
+            starRating: null,
+            title: '',
+            category: '',
+            tags: []
+        };
+    }
+
+    private handleError(err: HttpErrorResponse): ErrorObservable {
+        console.log(err);
+        // in a real world app, we may send the server to some remote logging infrastructure
+        // instead of just logging it to the console
+        let errorMessage: string;
+        if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            errorMessage = `Backend returned code ${err.status}, body was: ${err.error}`;
+        }
+        console.error(errorMessage);
+        return new ErrorObservable(errorMessage);
+    }
+
 }

@@ -20,10 +20,10 @@ export class MovieListComponent implements OnInit {
         this.movieService.selectedMovieChanges$.subscribe(
             selectedMovie => this.selectedMovie = selectedMovie
         );
-    
+
         this.getMovies();
       }
-    
+
       onSelected(movie: IMovie): void {
         this.movieService.changeSelectedMovie(movie);
       }
