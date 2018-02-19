@@ -24,9 +24,9 @@ export class MovieListComponent implements OnInit {
         this.getMovies();
       }
 
-      onSelected(movie: IMovie): void {
+    onSelected(movie: IMovie): void {
         this.movieService.changeSelectedMovie(movie);
-      }
+    }
 
     getMovies(): void {
         this.movieService.getMovies().subscribe(
