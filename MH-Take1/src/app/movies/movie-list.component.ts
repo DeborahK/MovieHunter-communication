@@ -34,9 +34,9 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        if (this.filterElementRef.nativeElement) {
-            this.filterElementRef.nativeElement.focus();
-        }
+        // if (this.filterElementRef.nativeElement) {
+        //     this.filterElementRef.nativeElement.focus();
+        // }
     }
 
     getMovies(): void {
