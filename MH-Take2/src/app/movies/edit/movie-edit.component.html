@@ -7,7 +7,7 @@
         <form class="form-horizontal"
               novalidate
               #editForm="ngForm"  
-              (ngSubmit)="saveMovie(editForm)">
+              (ngSubmit)="saveMovie()">
             <fieldset>
                 <div class="form-group" 
                      [ngClass]="{'has-error': (titleVar.touched || titleVar.dirty) && !titleVar.valid }">
