@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { of } from 'rxjs/observable/of';
 import { catchError, tap, map } from 'rxjs/operators';
+import { _throw as throwError } from 'rxjs/observable/throw';
 
 import { IMovie } from './movie';
 
@@ -113,7 +113,7 @@ export class MovieService {
         };
     }
 
-    private handleError(err: HttpErrorResponse): ErrorObservable {
+    private handleError(err: HttpErrorResponse) {
         console.log(err);
         // in a real world app, we may send the server to some remote logging infrastructure
         // instead of just logging it to the console
@@ -127,7 +127,7 @@ export class MovieService {
             errorMessage = `Backend returned code ${err.status}, body was: ${err.error}`;
         }
         console.error(errorMessage);
-        return new ErrorObservable(errorMessage);
+        return throwError(errorMessage);
     }
 
 }

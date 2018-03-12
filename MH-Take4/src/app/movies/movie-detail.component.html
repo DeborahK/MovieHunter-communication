@@ -4,6 +4,8 @@
     </div>
 
     <div class="panel-body">
+        <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+
         <div class="row">
             <div class="col-md-3">Description: </div>
             <div class="col-md-9">{{ movie.description }}</div>
