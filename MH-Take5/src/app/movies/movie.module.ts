@@ -13,8 +13,8 @@ import { MovieService } from './movie.service';
 import { MovieEditReactiveComponent } from './edit/movie-edit-reactive.component';
 
 const movieRoutes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     component: MovieShellComponent,
     children: [
       { path: ':id', component: MovieDetailComponent },

@@ -12,7 +12,7 @@ import { MovieService } from './movie.service';
 export class MovieListComponent implements OnInit {
     pageTitle: string = 'Movie List';
     errorMessage: string;
-    
+
     movies: IMovie[];
 
     get selectedMovie(): IMovie | null {
