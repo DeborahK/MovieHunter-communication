@@ -8,11 +8,17 @@
         <button type='button'
                 class='list-group-item'
                 *ngFor='let movie of movies'
-                [ngClass]="{'active': movie && movie?.id === selectedMovie?.id}"
+                [ngClass]="{'active': movie && movie?.id === currentMovie?.id}"
                 (click)='onSelected(movie)'>
           {{ movie.title }} ({{ movie.mpaa | uppercase }})
         </button>
       </div>
+    </div>
+
+    <div class="panel-footer text-right">
+      <a class="btn btn-primary" (click)='onAdd()'>
+          Add
+      </a>
     </div>
   </div>
   <div *ngIf='errorMessage' class='alert alert-danger'>
