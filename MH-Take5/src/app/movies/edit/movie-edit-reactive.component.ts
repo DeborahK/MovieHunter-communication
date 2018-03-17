@@ -118,19 +118,12 @@ export class MovieEditReactiveComponent implements OnInit {
       );
 
       this.movieService.saveMovie(this.movie).subscribe(
-        () => this.onSaveComplete(),
+        () => {
+          // Navigate back to the detail
+          this.router.navigate(['/movies', this.movieService.currentMovie.id, 'detail']);
+        },
         (error: any) => this.errorMessage = <any>error
       );
-    } else if (!this.editForm.dirty) {
-      this.onSaveComplete();
     }
-  }
-
-  onSaveComplete(): void {
-    // Reset the form to clear the flags
-    this.editForm.reset();
-
-    // Navigate back to the detail
-    this.router.navigate(['/movies', this.movieService.currentMovie.id, 'detail']);
   }
 }

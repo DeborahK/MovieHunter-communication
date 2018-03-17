@@ -15,7 +15,14 @@ export class MovieEditComponent implements OnInit {
   errorMessage: string;
 
   private originalMovie: IMovie;
-  movie: IMovie | null;
+  private editedMovie: IMovie | null;
+
+  get movie(): IMovie | null {
+    if (this.movieService.currentMovie && (!this.editedMovie || this.movieService.currentMovie.id !== this.editedMovie.id)) {
+      this.onMovieRetrieved(this.movieService.currentMovie);
+    }
+    return this.editedMovie;
+  }
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -27,8 +34,7 @@ export class MovieEditComponent implements OnInit {
     // changes from an edit to an add operation
     this.route.params.subscribe(
       param => {
-        console.log(this.movieService.currentMovie);
-        this.onMovieRetrieved(this.movieService.currentMovie);
+        this.editedMovie = null;
       }
     );
   }
@@ -42,7 +48,7 @@ export class MovieEditComponent implements OnInit {
     // Display the data in the form
     // Use a copy to allow cancel.
     this.originalMovie = movie;
-    this.movie = Object.assign({}, movie);
+    this.editedMovie = Object.assign({}, movie);
 
     // Adjust the title
     if (movie.id === 0) {
@@ -64,13 +70,15 @@ export class MovieEditComponent implements OnInit {
 
   saveMovie(): void {
     if (this.editForm.valid) {
-      this.movieService.saveMovie(this.movie).subscribe(
-        (newMovie: IMovie) => {
+      this.movieService.saveMovie(this.editedMovie).subscribe(
+        () => {
           // Assign the changes from the copy
-          Object.keys(this.movie).forEach(key =>
-            this.originalMovie[key] = this.movie[key]
+          Object.keys(this.editedMovie).forEach(key =>
+            this.originalMovie[key] = this.editedMovie[key]
           );
-          this.onSaveComplete();
+          
+          // Navigate back to the detail
+          this.router.navigate(['/movies', this.movieService.currentMovie.id, 'detail']);
         }
       );
     } else {
@@ -78,11 +86,4 @@ export class MovieEditComponent implements OnInit {
     }
   }
 
-  onSaveComplete(): void {
-    // Reset the form to clear the flags
-    this.editForm.reset();
-
-    // Navigate back to the detail
-    this.router.navigate(['/movies', this.movieService.currentMovie.id, 'detail']);
-  }
 }

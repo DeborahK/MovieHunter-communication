@@ -41,7 +41,6 @@ export class MovieShellComponent implements OnInit {
       param => {
         if (param.hasOwnProperty('id')) {
           const id = +param['id'];
-          console.log(id);
           if (!this.currentMovie || this.currentMovie.id !== id) {
             this.getMovie(id);
           }

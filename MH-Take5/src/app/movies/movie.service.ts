@@ -76,16 +76,19 @@ export class MovieService {
     }
 
     private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
-        movie.id = null;
-        return this.http.post<IMovie>(this.moviesUrl, movie,  { headers: headers} )
-                        .pipe(
-                            tap(data => console.log('createMovie: ' + JSON.stringify(data))),
-                            tap(data => {
-                                this.movies.push(data);
-                                this.currentMovie = data;
-                            }),
-                            catchError(this.handleError)
-                        );
+      // Make a copy so changing the id does not affect change detection
+      // id must be set to null for the in-memory web api
+      const movieToSave = Object.assign({}, movie);
+      movieToSave.id = null;
+      return this.http.post<IMovie>(this.moviesUrl, movieToSave,  { headers: headers} )
+                      .pipe(
+                          tap(data => console.log('createMovie: ' + JSON.stringify(data))),
+                          tap(data => {
+                              this.movies.push(data);
+                              this.currentMovie = data;
+                          }),
+                          catchError(this.handleError)
+                      );
     }
 
     private updateMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
