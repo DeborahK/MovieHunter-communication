@@ -125,9 +125,7 @@ export class MovieEditReactiveComponent implements OnInit {
   saveMovie(): void {
     if (this.editForm.valid) {
       // Copy the form values into the object
-      Object.keys(this.editForm.value).forEach(key =>
-        this.originalMovie[key] = this.editForm.value[key]
-      );
+      Object.assign(this.originalMovie, this.editForm.value);
 
       this.movieService.saveMovie(this.originalMovie).subscribe(
         () => {
