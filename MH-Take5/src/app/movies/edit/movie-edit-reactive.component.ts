@@ -14,8 +14,16 @@ export class MovieEditReactiveComponent implements OnInit {
   formError: { [id: string]: string };
   private validationMessages: { [id: string]: { [id: string]: string } };
 
-  movie: IMovie;
+  private originalMovie: IMovie;
+  private editedMovie: IMovie;
   errorMessage: string;
+
+  get movie(): IMovie | null {
+    if (this.movieService.currentMovie && (!this.editedMovie || this.movieService.currentMovie.id !== this.editedMovie.id)) {
+      this.onMovieRetrieved(this.movieService.currentMovie);
+    }
+    return this.editedMovie;
+  }
 
   constructor(private fb: FormBuilder,
     private movieService: MovieService,
@@ -25,13 +33,14 @@ export class MovieEditReactiveComponent implements OnInit {
     // With FormBuilder
     this.editForm = this.fb.group({
       title: ['', [Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(50)]],
+                   Validators.minLength(3),
+                   Validators.maxLength(50)]],
       director: ['', [Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(50)]],
+                      Validators.minLength(5),
+                      Validators.maxLength(50)]],
+      price: [''],
       starRating: ['', [Validators.min(1),
-      Validators.max(5)]],
+                        Validators.max(5)]],
       description: ['']
     });
 
@@ -43,6 +52,7 @@ export class MovieEditReactiveComponent implements OnInit {
     this.formError = {
       'title': '',
       'director': '',
+      'price': '',
       'starRating': '',
       'description': ''
     };
@@ -66,7 +76,6 @@ export class MovieEditReactiveComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onMovieRetrieved(this.movieService.currentMovie);
   }
 
   onMovieRetrieved(movie: IMovie): void {
@@ -75,7 +84,9 @@ export class MovieEditReactiveComponent implements OnInit {
       this.editForm.reset();
     }
 
-    this.movie = movie;
+    this.originalMovie = movie;
+    this.editedMovie = Object.assign({}, movie);
+
     this.pageTitle = `Edit Movie (Reactive): ${this.movie.title}`;
 
     // Update the data on the form
@@ -83,6 +94,7 @@ export class MovieEditReactiveComponent implements OnInit {
       title: this.movie.title,
       director: this.movie.director,
       starRating: this.movie.starRating,
+      price: this.movie.price,
       description: this.movie.description
     });
   }
@@ -114,10 +126,10 @@ export class MovieEditReactiveComponent implements OnInit {
     if (this.editForm.valid) {
       // Copy the form values into the object
       Object.keys(this.editForm.value).forEach(key =>
-        this.movie[key] = this.editForm.value[key]
+        this.originalMovie[key] = this.editForm.value[key]
       );
 
-      this.movieService.saveMovie(this.movie).subscribe(
+      this.movieService.saveMovie(this.originalMovie).subscribe(
         () => {
           // Navigate back to the detail
           this.router.navigate(['/movies', this.movieService.currentMovie.id, 'detail']);
