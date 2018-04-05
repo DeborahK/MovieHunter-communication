@@ -21,8 +21,7 @@ export class MovieListComponent implements OnInit {
     return this.movieService.currentMovie;
   }
 
-  constructor(private router: Router,
-    private movieService: MovieService) { }
+  constructor(private movieService: MovieService) { }
 
   ngOnInit() {
       // Get the array of movies
