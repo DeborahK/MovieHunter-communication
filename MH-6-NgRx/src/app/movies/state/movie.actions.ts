@@ -107,7 +107,7 @@ export class DeleteMovieFail implements Action {
 }
 
 // Union the valid types
-export type MovieActions = 
+export type MovieActions =
     SetCurrentMovie
   | ClearCurrentMovie
   | InitializeCurrentMovie
