@@ -4,35 +4,34 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MovieShellComponent } from './movie-shell.component';
-import { MovieListComponent } from './movie-list.component';
-import { MovieDetailComponent } from './movie-detail.component';
-import { MovieEditComponent } from './edit/movie-edit.component';
+import { MovieShellComponent } from './movie-shell/movie-shell.component';
+import { MovieListComponent } from './movie-list/movie-list.component';
+import { MovieDetailComponent } from './movie-detail/movie-detail.component';
 
-import { MovieService } from './movie.service';
-import { MovieEditReactiveComponent } from './edit/movie-edit-reactive.component';
+/* NgRx */
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './state/movie.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { MovieEffects } from './state/movie.effects';
 
 const movieRoutes: Routes = [
   { path: '', component: MovieShellComponent },
-  { path: ':id/edit', component: MovieEditComponent },
-  { path: ':id/editReactive', component: MovieEditReactiveComponent }
 ];
 
 @NgModule({
   imports: [
     SharedModule,
     ReactiveFormsModule,
-    RouterModule.forChild(movieRoutes)
+    RouterModule.forChild(movieRoutes),
+    StoreModule.forFeature('movies', reducer),
+    EffectsModule.forFeature(
+      [ MovieEffects ]
+    ),
   ],
   declarations: [
     MovieShellComponent,
     MovieListComponent,
-    MovieDetailComponent,
-    MovieEditComponent,
-    MovieEditReactiveComponent
-  ],
-  providers: [
-    MovieService
+    MovieDetailComponent
   ]
 })
 export class MovieModule { }

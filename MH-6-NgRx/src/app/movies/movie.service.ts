@@ -1,107 +1,67 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, of, throwError, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
-import { IMovie } from './movie';
-import { MovieModule } from './movie.module';
+import { Movie } from './movie';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
   private moviesUrl = 'api/movies';
-  private movies: IMovie[];
-
-  private selectedMovieSource = new BehaviorSubject<IMovie | null>(null);
-  selectedMovieChanges$ = this.selectedMovieSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  changeSelectedMovie(selectedMovie: IMovie | null): void {
-    this.selectedMovieSource.next(selectedMovie);
-  }
-
-  getMovies(): Observable<IMovie[]> {
-    if (this.movies) {
-      return of(this.movies);
-    }
-    return this.http.get<IMovie[]>(this.moviesUrl)
+  getMovies(): Observable<Movie[]> {
+    return this.http.get<Movie[]>(this.moviesUrl)
       .pipe(
         tap(data => console.log(JSON.stringify(data))),
-        tap(data => this.movies = data),
         catchError(this.handleError)
       );
   }
 
-  getMovie(id: number): Observable<IMovie> {
-    if (id === 0) {
-      return of(this.initializeMovie());
-    }
-    if (this.movies) {
-      const foundItem = this.movies.find(item => item.id === id);
-      if (foundItem) {
-        return of(foundItem);
-      }
-    }
+  getMovie(id: number): Observable<Movie> {
     const url = `${this.moviesUrl}/${id}`;
-    return this.http.get<IMovie>(url)
+    return this.http.get<Movie>(url)
       .pipe(
         tap(data => console.log('Data: ' + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
 
-  saveMovie(movie: IMovie): Observable<IMovie> {
+  createMovie(movie: Movie): Observable<Movie> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    if (movie.id === 0) {
-      return this.createMovie(movie, headers);
-    }
-    return this.updateMovie(movie, headers);
+    movie.id = null;
+    return this.http.post<Movie>(this.moviesUrl, movie, { headers: headers })
+      .pipe(
+        tap(data => console.log('createMovie: ' + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
   deleteMovie(id: number): Observable<{}> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     const url = `${this.moviesUrl}/${id}`;
-    return this.http.delete<IMovie>(url, { headers: headers })
+    return this.http.delete<Movie>(url, { headers: headers })
       .pipe(
         tap(data => console.log('deleteMovie: ' + JSON.stringify(data))),
-        tap(data => {
-          const foundIndex = this.movies.findIndex(item => item.id === id);
-          if (foundIndex > -1) {
-            this.movies.splice(foundIndex, 1);
-            this.changeSelectedMovie(null);
-          }
-        }),
         catchError(this.handleError)
       );
   }
 
-  private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
-    movie.id = null;
-    return this.http.post<IMovie>(this.moviesUrl, movie, { headers: headers })
-      .pipe(
-        tap(data => console.log('createMovie: ' + JSON.stringify(data))),
-        tap(data => {
-          this.movies.push(data);
-          this.changeSelectedMovie(data);
-        }),
-        catchError(this.handleError)
-      );
-  }
-
-  private updateMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
+  updateMovie(movie: Movie): Observable<Movie> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.moviesUrl}/${movie.id}`;
-    return this.http.put<IMovie>(url, movie, { headers: headers })
+    return this.http.put<Movie>(url, movie, { headers: headers })
       .pipe(
         tap(data => console.log('updateMovie: ' + movie.id)),
         catchError(this.handleError)
       );
   }
 
-  private initializeMovie(): IMovie {
+  private initializeMovie(): Movie {
     // Return an initialized object
     return {
       id: 0,

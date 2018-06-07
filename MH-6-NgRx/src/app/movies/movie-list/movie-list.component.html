@@ -1,4 +1,4 @@
-﻿<div class='panel panel-primary' *ngIf='movies?.length'>
+﻿<div class='panel panel-primary' *ngIf='movies$ | async as movies'>
     <div class='panel-heading'>
       {{pageTitle}}
     </div>
@@ -15,6 +15,6 @@
       </div>
     </div>
   </div>
-  <div *ngIf='errorMessage' class='alert alert-danger'>
+  <div *ngIf='errorMessage$ | async as errorMessage' class='alert alert-danger'>
     Error: {{ errorMessage }}
   </div>

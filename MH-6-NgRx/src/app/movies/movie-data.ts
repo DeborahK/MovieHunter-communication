@@ -1,11 +1,11 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
-import { IMovie } from './movie';
+import { Movie } from './movie';
 
 export class MovieData implements InMemoryDbService {
 
     createDb() {
-        const movies: IMovie[] = [
+        const movies: Movie[] = [
             {
                 'id': 1,
                 'approvalRating': 0.97,
