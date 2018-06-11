@@ -1,5 +1,5 @@
 /* Defines the movie entity */
-export interface IMovie {
+export interface Movie {
     id: number | null;
     approvalRating: number | null;
     description: string;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IMovie } from './movie';
+import { Movie } from './movie';
 import { MovieService } from './movie.service';
 import { CriteriaComponent } from '../shared/criteria/criteria.component';
 
@@ -9,13 +9,13 @@ import { CriteriaComponent } from '../shared/criteria/criteria.component';
     styleUrls: ['./movie-list.component.css']
 })
 export class MovieListComponent implements OnInit {
-    pageTitle: string = 'Movie List';
+    pageTitle = 'Movie List';
     errorMessage: string;
-    showImage: boolean = false;
-    includeDetail: boolean = true;
+    showImage = false;
+    includeDetail = true;
 
-    filteredMovies: IMovie[];
-    movies: IMovie[];
+    filteredMovies: Movie[];
+    movies: Movie[];
 
     constructor(private movieService: MovieService) { }
 
@@ -25,7 +25,7 @@ export class MovieListComponent implements OnInit {
 
     getMovies(): void {
         this.movieService.getMovies().subscribe(
-            (movies: IMovie[]) => {
+            (movies: Movie[]) => {
                 this.movies = movies;
                 this.performFilter(null);
             },
@@ -40,7 +40,7 @@ export class MovieListComponent implements OnInit {
     performFilter(filterBy: string | null): void {
         if (filterBy) {
             filterBy = filterBy.toLocaleLowerCase();
-            this.filteredMovies = this.movies.filter((movie: IMovie) =>
+            this.filteredMovies = this.movies.filter((movie: Movie) =>
                 movie.title.toLocaleLowerCase().indexOf(filterBy) !== -1);
         } else {
             this.filteredMovies = this.movies;

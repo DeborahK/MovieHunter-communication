@@ -1,33 +1,32 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of, throwError, Subject, BehaviorSubject } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
-import { IMovie } from './movie';
-import { MovieModule } from './movie.module';
+import { Movie } from './movie';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
   private moviesUrl = 'api/movies';
-  private movies: IMovie[];
+  private movies: Movie[];
 
-  private selectedMovieSource = new BehaviorSubject<IMovie | null>(null);
+  private selectedMovieSource = new BehaviorSubject<Movie | null>(null);
   selectedMovieChanges$ = this.selectedMovieSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  changeSelectedMovie(selectedMovie: IMovie | null): void {
+  changeSelectedMovie(selectedMovie: Movie | null): void {
     this.selectedMovieSource.next(selectedMovie);
   }
 
-  getMovies(): Observable<IMovie[]> {
+  getMovies(): Observable<Movie[]> {
     if (this.movies) {
       return of(this.movies);
     }
-    return this.http.get<IMovie[]>(this.moviesUrl)
+    return this.http.get<Movie[]>(this.moviesUrl)
       .pipe(
         tap(data => console.log(JSON.stringify(data))),
         tap(data => this.movies = data),
@@ -35,7 +34,7 @@ export class MovieService {
       );
   }
 
-  getMovie(id: number): Observable<IMovie> {
+  getMovie(id: number): Observable<Movie> {
     if (id === 0) {
       return of(this.initializeMovie());
     }
@@ -46,14 +45,14 @@ export class MovieService {
       }
     }
     const url = `${this.moviesUrl}/${id}`;
-    return this.http.get<IMovie>(url)
+    return this.http.get<Movie>(url)
       .pipe(
         tap(data => console.log('Data: ' + JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
 
-  saveMovie(movie: IMovie): Observable<IMovie> {
+  saveMovie(movie: Movie): Observable<Movie> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (movie.id === 0) {
       return this.createMovie(movie, headers);
@@ -65,7 +64,7 @@ export class MovieService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const url = `${this.moviesUrl}/${id}`;
-    return this.http.delete<IMovie>(url, { headers: headers })
+    return this.http.delete<Movie>(url, { headers: headers })
       .pipe(
         tap(data => console.log('deleteMovie: ' + JSON.stringify(data))),
         tap(data => {
@@ -79,9 +78,9 @@ export class MovieService {
       );
   }
 
-  private createMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
+  private createMovie(movie: Movie, headers: HttpHeaders): Observable<Movie> {
     movie.id = null;
-    return this.http.post<IMovie>(this.moviesUrl, movie, { headers: headers })
+    return this.http.post<Movie>(this.moviesUrl, movie, { headers: headers })
       .pipe(
         tap(data => console.log('createMovie: ' + JSON.stringify(data))),
         tap(data => {
@@ -92,16 +91,16 @@ export class MovieService {
       );
   }
 
-  private updateMovie(movie: IMovie, headers: HttpHeaders): Observable<IMovie> {
+  private updateMovie(movie: Movie, headers: HttpHeaders): Observable<Movie> {
     const url = `${this.moviesUrl}/${movie.id}`;
-    return this.http.put<IMovie>(url, movie, { headers: headers })
+    return this.http.put<Movie>(url, movie, { headers: headers })
       .pipe(
         tap(data => console.log('updateMovie: ' + movie.id)),
         catchError(this.handleError)
       );
   }
 
-  private initializeMovie(): IMovie {
+  private initializeMovie(): Movie {
     // Return an initialized object
     return {
       id: 0,

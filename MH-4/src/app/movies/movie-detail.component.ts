@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IMovie } from './movie';
+import { Movie } from './movie';
 import { MovieService } from './movie.service';
 
 @Component({
@@ -9,10 +9,10 @@ import { MovieService } from './movie.service';
     styleUrls: ['./movie-detail.component.css']
 })
 export class MovieDetailComponent implements OnInit {
-    pageTitle: string = 'Movie Detail';
+    pageTitle = 'Movie Detail';
     errorMessage: string;
 
-    get movie(): IMovie | null {
+    get movie(): Movie | null {
         return this.movieService.currentMovie;
     }
 

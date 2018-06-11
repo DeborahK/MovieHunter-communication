@@ -4,5 +4,5 @@ import { Component } from '@angular/core';
     templateUrl: './welcome.component.html'
 })
 export class WelcomeComponent {
-    public pageTitle: string = 'InStep Movie Hunter: Take 4';
+    public pageTitle = 'InStep Movie Hunter: Take 4';
 }

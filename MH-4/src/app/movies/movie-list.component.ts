@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IMovie } from './movie';
+import { Movie } from './movie';
 import { MovieService } from './movie.service';
 
 @Component({
@@ -9,11 +9,11 @@ import { MovieService } from './movie.service';
     styleUrls: ['./movie-list.component.css']
 })
 export class MovieListComponent implements OnInit {
-    pageTitle: string = 'Movie List';
+    pageTitle = 'Movie List';
     errorMessage: string;
-    movies: IMovie[];
+    movies: Movie[];
 
-    get selectedMovie(): IMovie | null {
+    get selectedMovie(): Movie | null {
         return this.movieService.currentMovie;
     }
 
@@ -25,12 +25,12 @@ export class MovieListComponent implements OnInit {
 
     getMovies(): void {
         this.movieService.getMovies().subscribe(
-            (movies: IMovie[]) => this.movies = movies,
+            (movies: Movie[]) => this.movies = movies,
             (error: any) => this.errorMessage = <any>error
         );
     }
 
-    onSelected(movie: IMovie): void {
+    onSelected(movie: Movie): void {
         this.movieService.currentMovie = movie;
     }
 }

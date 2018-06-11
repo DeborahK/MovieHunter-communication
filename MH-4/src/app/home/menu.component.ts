@@ -8,7 +8,7 @@ import { AuthService } from '../user/auth.service';
   templateUrl: './menu.component.html'
 })
 export class MenuComponent implements OnInit {
-  pageTitle: string = 'InStep Movie Hunter';
+  pageTitle = 'InStep Movie Hunter';
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();

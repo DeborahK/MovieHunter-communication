@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
-import { IMovie } from './movie';
+import { Movie } from './movie';
 import { MovieService } from './movie.service';
 
 @Component({
@@ -8,13 +8,13 @@ import { MovieService } from './movie.service';
     styleUrls: ['./movie-list.component.css']
 })
 export class MovieListComponent implements OnInit, AfterViewInit {
-    pageTitle: string = 'Movie List';
+    pageTitle = 'Movie List';
     errorMessage: string;
-    showImage: boolean = false;
+    showImage = false;
     listFilter: string;
 
-    filteredMovies: IMovie[];
-    movies: IMovie[];
+    filteredMovies: Movie[];
+    movies: Movie[];
 
     @ViewChild('filterElement') filterElementRef: ElementRef;
 
@@ -41,7 +41,7 @@ export class MovieListComponent implements OnInit, AfterViewInit {
 
     getMovies(): void {
         this.movieService.getMovies().subscribe(
-            (movies: IMovie[]) => {
+            (movies: Movie[]) => {
                 this.movies = movies;
                 this.performFilter(this.listFilter);
             },
@@ -52,7 +52,7 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     performFilter(filterBy: string | null): void {
         if (filterBy) {
             filterBy = filterBy.toLocaleLowerCase();
-            this.filteredMovies = this.movies.filter((movie: IMovie) =>
+            this.filteredMovies = this.movies.filter((movie: Movie) =>
                 movie.title.toLocaleLowerCase().indexOf(filterBy) !== -1);
         } else {
             this.filteredMovies = this.movies;

@@ -5,7 +5,7 @@ import { MovieService } from './movie.service';
     templateUrl: './movie-shell.component.html'
 })
 export class MovieShellComponent implements OnInit {
-    pageTitle: string = 'Movies';
+    pageTitle = 'Movies';
 
     get yearCount(): number {
         const currentMovie = this.movieService.currentMovie;

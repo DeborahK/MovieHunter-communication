@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { IMovie } from '../movie';
+import { Movie } from '../movie';
 import { MovieService } from '../movie.service';
 
 @Component({
     templateUrl: './movie-edit-reactive.component.html'
 })
 export class MovieEditReactiveComponent implements OnInit {
-    pageTitle: string = 'Edit Movie';
+    pageTitle = 'Edit Movie';
     editForm: FormGroup;
     formError: { [id: string]: string };
     private validationMessages: { [id: string]: { [id: string]: string } };
-    movie: IMovie;
+    movie: Movie;
     errorMessage: string;
 
     constructor(private fb: FormBuilder,
@@ -81,7 +81,7 @@ export class MovieEditReactiveComponent implements OnInit {
         );
     }
 
-    onMovieRetrieved(movie: IMovie): void {
+    onMovieRetrieved(movie: Movie): void {
         // Reset the form back to pristine
         if (this.editForm) {
             this.editForm.reset();

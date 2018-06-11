@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { IMovie } from './movie';
+import { Movie } from './movie';
 import { MovieService } from './movie.service';
 
 @Component({
@@ -9,8 +9,8 @@ import { MovieService } from './movie.service';
     styleUrls: ['./movie-detail.component.css']
 })
 export class MovieDetailComponent implements OnInit {
-    pageTitle: string = 'Movie Detail';
-    movie: IMovie;
+    pageTitle = 'Movie Detail';
+    movie: Movie;
     errorMessage: string;
 
     constructor(private movieService: MovieService,

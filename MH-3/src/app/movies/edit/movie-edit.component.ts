@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IMovie } from '../movie';
+import { Movie } from '../movie';
 import { MovieService } from '../movie.service';
 
 @Component({
@@ -14,8 +14,8 @@ export class MovieEditComponent implements OnInit {
     pageTitle = 'Movie Edit';
     errorMessage: string;
 
-    movie: IMovie;
-    private originalMovie: IMovie;
+    movie: Movie;
+    private originalMovie: Movie;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -38,7 +38,7 @@ export class MovieEditComponent implements OnInit {
         );
     }
 
-    onMovieRetrieved(movie: IMovie): void {
+    onMovieRetrieved(movie: Movie): void {
         // Reset the form back to pristine
         if (this.editForm) {
             this.editForm.reset();
