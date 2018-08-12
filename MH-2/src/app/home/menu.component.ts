@@ -5,7 +5,8 @@ import { AuthService } from '../user/auth.service';
 
 @Component({
   selector: 'mh-menu',
-  templateUrl: './menu.component.html'
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
   pageTitle = 'InStep Movie Hunter';
