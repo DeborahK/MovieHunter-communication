@@ -29,9 +29,6 @@ const movieRoutes: Routes = [
     MovieDetailComponent,
     MovieEditComponent,
     MovieEditReactiveComponent
-  ],
-  providers: [
-    MovieService
   ]
 })
 export class MovieModule { }
