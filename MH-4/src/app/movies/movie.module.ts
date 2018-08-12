@@ -9,7 +9,6 @@ import { MovieListComponent } from './movie-list.component';
 import { MovieDetailComponent } from './movie-detail.component';
 import { MovieEditComponent } from './edit/movie-edit.component';
 
-import { MovieService } from './movie.service';
 import { MovieEditReactiveComponent } from './edit/movie-edit-reactive.component';
 
 const movieRoutes: Routes = [
@@ -30,9 +29,6 @@ const movieRoutes: Routes = [
     MovieDetailComponent,
     MovieEditComponent,
     MovieEditReactiveComponent
-  ],
-  providers: [
-    MovieService
   ]
 })
 export class MovieModule { }

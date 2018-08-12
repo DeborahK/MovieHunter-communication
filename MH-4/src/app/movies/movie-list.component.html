@@ -1,20 +1,23 @@
-﻿<div class='panel panel-primary' *ngIf='movies?.length'>
-    <div class='panel-heading'>
-      {{pageTitle}}
-    </div>
-  
-    <div class='panel-body'>
-      <div class='list-group'>
-        <button type='button'
-                class='list-group-item'
-                *ngFor='let movie of movies'
-                [ngClass]="{'active': movie?.id === selectedMovie?.id}"
-                (click)='onSelected(movie)'>
-          {{ movie.title }} ({{ movie.mpaa | uppercase }})
-        </button>
-      </div>
+﻿<div class='card'>
+  <div class='card-header'>
+    {{pageTitle}}
+  </div>
+
+  <div class='card-body'
+       *ngIf='movies?.length'>
+    <div class='list-group'>
+      <button type='button'
+              class='list-group-item'
+              *ngFor='let movie of movies'
+              [ngClass]="{'active': movie?.id === selectedMovie?.id}"
+              (click)='onSelected(movie)'>
+        {{ movie.title }} ({{ movie.mpaa | uppercase }})
+      </button>
     </div>
   </div>
-  <div *ngIf='errorMessage' class='alert alert-danger'>
-    Error: {{ errorMessage }}
-  </div>
+</div>
+
+<div class='alert alert-danger'
+     *ngIf='errorMessage'>
+  Error: {{ errorMessage }}
+</div>
