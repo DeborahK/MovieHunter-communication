@@ -23,7 +23,6 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromMovie.State>) { }
 
   ngOnInit(): void {
-    // Subscribe here because it does not use an async pipe
     this.store.pipe(
       select(fromMovie.getCurrentMovie),
       takeWhile(() => this.componentActive)
