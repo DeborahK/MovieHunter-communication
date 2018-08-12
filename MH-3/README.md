@@ -1,7 +1,7 @@
 # MovieHunter-communication
-Code for my talks on Angular component communication.
+Code for my talks on Angular component communication: Data caching service with Subject/BehaviorSubject.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.3.
 
 ## Development server
 
